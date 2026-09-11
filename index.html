@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script>(function(){try{if(localStorage.getItem('onboardingTheme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();</script>
 <title>ApartmentCorp — New Hire Onboarding Portal</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
@@ -18,6 +19,15 @@
   --text1:#ecf0f9;--text2:#8d97b0;--text3:#4e5a78;
   --r:10px;--r2:7px;
 }
+html[data-theme="light"]{
+  --bg0:#f4f5f9;--bg1:#ffffff;--bg2:#ffffff;--bg3:#edf0f5;--bg4:#e1e5ec;
+  --border:rgba(20,25,45,0.09);--border2:rgba(20,25,45,0.15);
+  --text1:#171b2e;--text2:#5c6579;--text3:#98a0b3;
+}
+html[data-theme="light"] .diamond-bg{background-image:repeating-linear-gradient(45deg,#000 0,#000 1px,transparent 0,transparent 50%);opacity:0.025;}
+html[data-theme="light"] .nh-table tr:hover td{background:rgba(20,25,45,0.03);}
+.theme-toggle{position:fixed;top:16px;right:16px;z-index:999;width:38px;height:38px;border-radius:50%;background:var(--bg2);border:1px solid var(--border2);color:var(--text1);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 16px rgba(0,0,0,0.25);transition:all 0.15s;}
+.theme-toggle:hover{border-color:var(--green);transform:scale(1.06);}
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{min-height:100vh;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;background:var(--bg0);color:var(--text1);font-size:13px;line-height:1.6;}
@@ -423,6 +433,8 @@ a{color:var(--green);text-decoration:none;}
 </style>
 </head>
 <body>
+
+<button id="theme-toggle-btn" class="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark mode" aria-label="Toggle light / dark mode">🌙</button>
 
 <!-- ── FORM MODAL ─────────────────────────────── -->
 <div id="form-modal-overlay" class="form-modal-overlay hidden" onclick="closeFormModalOverlay(event)">
@@ -2204,6 +2216,25 @@ function toast(msg, type='green'){
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2800);
 }
+
+// ── THEME TOGGLE ───────────────────────────────────────────
+function applyThemeIcon(){
+  const isLight=document.documentElement.getAttribute('data-theme')==='light';
+  const btn=document.getElementById('theme-toggle-btn');
+  if(btn) btn.textContent=isLight?'☀️':'🌙';
+}
+function toggleTheme(){
+  const isLight=document.documentElement.getAttribute('data-theme')==='light';
+  if(isLight){
+    document.documentElement.removeAttribute('data-theme');
+    try{localStorage.setItem('onboardingTheme','dark');}catch(e){}
+  }else{
+    document.documentElement.setAttribute('data-theme','light');
+    try{localStorage.setItem('onboardingTheme','light');}catch(e){}
+  }
+  applyThemeIcon();
+}
+applyThemeIcon();
 
 // ── INIT ───────────────────────────────────────────────────
 document.querySelectorAll('.screen').forEach(s=>{s.style.display='none';});
