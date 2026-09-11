@@ -1511,6 +1511,18 @@ function updateAdminPinDots(){
   }
   document.getElementById('admin-pin-error').textContent='';
 }
+// Allow typing the admin PIN on a keyboard, not just clicking the keypad.
+document.addEventListener('keydown', function(e){
+  const pinScreen=document.getElementById('admin-pin-screen');
+  if(!pinScreen || pinScreen.offsetParent===null) return; // screen not visible
+  if(e.key>='0' && e.key<='9'){
+    e.preventDefault();
+    adminPinPress(e.key);
+  } else if(e.key==='Backspace' || e.key==='Delete'){
+    e.preventDefault();
+    adminPinDel();
+  }
+});
 
 function adminHireChange(){ renderAdminTabs(); }
 
